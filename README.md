@@ -16,11 +16,11 @@ Smart Pieces is a new way to define and use code snippets.
 
 ###What is the problem of normal snippets ?
 
-Snippets are really usefull while writing code; Instaed of writing all the code, you just hit some keys and the snippet is written automatically by your editor. I am using Sublime Text and I started defining snippets for every piece of code I usualy use. But every time I insert a snippet, I have to fill in the gaps and remove some optional parts, and it starts to be more stupid when I have to fill two placeholders while the second one is just a CamlCase of the first. More then that, there is no `include` statement in snippets ( You can't include one snippet into an other ).
+Snippets are really useful while writing code; Instead of writing all the code, you just hit some keys and the snippet is written automatically by your editor. I am using Sublime Text and I started defining snippets for every piece of code I usually use. But every time I insert a snippet, I have to fill in the gaps and remove some optional parts, and it starts to be more stupid when I have to fill two place holders while the second one is just a CamlCase of the first. More then that, there is no `include` statement in snippets ( You can't include one snippet into an other ).
 
 ###The solution ?
 
-Instead of inserting the snippet then filling the placeholders, you pass the values of placeholder while calling the snippet, the snippet becomes a command accepting values as parameters. You can also specify flags to show/hide optional parts. Smat Pieces are written using the [Twig templating engine](http://twig.sensiolabs.org/), So filters are there and you don't have to pass the same value twice if a filter can get the second value from the first one. Alternatives, Loops and include statement are also available.
+Instead of inserting the snippet then filling the place holders, you pass the values of placeholder while calling the snippet, the snippet becomes a command accepting values as parameters. You can also specify flags to show/hide optional parts. Smat Pieces are written using the [Twig templating engine](http://twig.sensiolabs.org/), So filters are there and you don't have to pass the same value twice if a filter can get the second value from the first one. Alternatives, Loops and include statement are also available.
 
 ##Install Smart Pieces
 
@@ -45,7 +45,7 @@ Let's start by adding a new snippet for the piece of code we use to test if an a
 `default.twig` contains our snippet default template. The parameters passed to the snippet will be automatically available in the template as an array `data`. In our simple snippet, we just need the container name and the element we are searching for in order to build the piece of code. So our template could be like this (for PHP language):
 
     if( in_array(${{data[1]}}, ${{data[0]}}) ){
-    	
+       
     }
 
 In this template, we assume that the first parameter (`data[0]`) is the container and the second (`data[1]`) is the element we are checking. To see the result, run this command:
@@ -55,7 +55,7 @@ In this template, we assume that the first parameter (`data[0]`) is the containe
 It should get this as output:
 
     if( in_array($myElement, $myArray) ){
-    	
+       
     }
 
 Simple right ? But Smart Pieces are smarter than that !
@@ -72,33 +72,33 @@ But this would be a bad solution because it will make the template complex to wr
 
 "Huh ?! What is the difference ?". The difference is that now `myArray1:myElement1` a single parameter, and don't worry, you will not have to split it in the template. Smart Piece will do it for you. You just need to describe how do you want it to be splitted by adding an new file "format.json" into the `contains` directory. The content of this file will be:
 
-	{
-		"type": "object",
-		"fields": {
-			"list": "string",
-			"element": "string"
-		}
-	}
+    {
+        "type": "object",
+        "fields": {
+            "list": "string",
+            "element": "string"
+        }
+    }
 
 Here we are saying that every parameter is an object with two string fields: list and element. Note that we declared the fields in the same order as in the command line. Now our template becomes:
 
-	if( in_array(${{data[0].element}}, ${{data[0].list}}){% for c in data|slice(1) %} && in_array(${{c.element}}, ${{c.list}}){% endfor %} ){
-		
-	}
+    if( in_array(${{data[0].element}}, ${{data[0].list}}){% for c in data|slice(1) %} && in_array(${{c.element}}, ${{c.list}}){% endfor %} ){
+       
+    }
 
 Now the command `./smart-pieces render contains myArray1:myElement1 myArray2:myElement2` should output:
 
-	if( in_array($myElement1, $myArray1) && in_array($myElement2, $myArray2) ){
-		
-	}
+    if( in_array($myElement1, $myArray1) && in_array($myElement2, $myArray2) ){
+       
+    }
 
-###Add Specifique Templates
+###Add Specific Templates
 
-Our snippet is working now, but only for PHP language. Instead of making other snippets for other languages, you can just add other templates in the `contains` directory with the name `language.twig`. Let's add the javascript version for example:
+Our snippet is working now, but only for PHP language. Instead of making other snippets for other languages, you can just add other templates in the `contains` directory with the name `language.twig`. Let's add the Javascript version for example:
 
-	if( {{data[0].list}}.indexOf({{data[0].element}}) != -1{% for c in data|slice(1) %} && {{c.list}}.indexOf({{c.element}}) != -1{% endfor %} ){
-		
-	}
+    if( {{data[0].list}}.indexOf({{data[0].element}}) != -1{% for c in data|slice(1) %} && {{c.list}}.indexOf({{c.element}}) != -1{% endfor %} ){
+       
+    }
 
 We save this template with the name `js.twig` and we run this command:
 
@@ -122,51 +122,51 @@ the `format.json` file is used to describe the structure of a parameter. A forma
 
 `format.json`:
 
-	{
-		"type": "object",
-		"fields": {
-			"name": "string",
-			"return": "string",
-			"args": {
-				"type": "array",
-				"format": {
-					"type": "object",
-					"separator": ".",
-					"fields": {
-						"name": "string",
-						"type": "string"
-					}
-				}
-			}
-		},
-		"flags": [ "static", "inline" ]
-	}
+    {
+        "type": "object",
+        "fields": {
+            "name": "string",
+            "return": "string",
+            "args": {
+                "type": "array",
+                "format": {
+                    "type": "object",
+                    "separator": ".",
+                    "fields": {
+                        "name": "string",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "flags": [ "static", "inline" ]
+    }
 
 The command: `./smart-pieces render snippet-name sum:int:a.int,b.int:static`
 
 The data sent to the template:
 
-	[
-	  0 => [
-	    name => 'sum',
-	    return => 'int',
-	    args => [
-	      0 => [
-			name => 'a',
-			type => 'int'
-	      ],
-	      1 => [
-			name => 'b',
-			type => 'int'
-	      ]
-	    ],
-	    static => true,
-	    inline => false
-	  ]
-	]
+    [
+      0 => [
+        name => 'sum',
+        return => 'int',
+        args => [
+          0 => [
+            name => 'a',
+            type => 'int'
+          ],
+          1 => [
+            name => 'b',
+            type => 'int'
+          ]
+        ],
+        static => true,
+        inline => false
+      ]
+    ]
 
 ##What is Next
 
-Smart Pieces is actualy working from the command line, but should be able to call it directly from within your favorite editor. That's why I am working on plugins for major editors. In particular, the ST3 plugin will be released soon.
+Smart Pieces is actually working from the command line, but should be able to call it directly from within your favourite editor. That's why I am working on plugins for major editors. In particular, the ST3 plugin will be released soon.
 
 Please report any bugs or issues you find. Pull requests are welcome, I will be adding the most used snippets and you can contribute with yours.
