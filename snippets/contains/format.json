@@ -1,0 +1,7 @@
+{
+	"type": "object",
+	"fields": {
+		"list": "string",
+		"element": "string"
+	}
+}

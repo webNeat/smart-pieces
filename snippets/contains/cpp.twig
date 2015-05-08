@@ -1,0 +1,4 @@
+// don't forget to include algorithm
+if( std::find({{data[0].list}}.begin(), {{data[0].list}}.end(), {{data[0].element}}) != {{data[0].list}}.end(){% for c in data|slice(1) %} && std::find({{c.list}}.begin(), {{c.list}}.end(), {{c.element}}) != {{c.list}}.end(){% endfor %} ){
+	
+}

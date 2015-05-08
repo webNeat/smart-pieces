@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+use Symfony\Component\Console\Application;
+use wn\RenderCommand;
+require __DIR__ . '/vendor/autoload.php';
+
+define('SNIPPETS_DIR',__DIR__ . '/snippets');
+
+$loader = new \Twig_Loader_Filesystem(SNIPPETS_DIR);
+$twig = new \Twig_Environment($loader);
+
+$app = new Application('Smart Pieces', '1.0');
+$app->add(new RenderCommand($twig));
+$app->run();

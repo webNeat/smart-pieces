@@ -1,0 +1,3 @@
+if( {{data[0].list}}.indexOf({{data[0].element}}) != -1{% for c in data|slice(1) %} && {{c.list}}.indexOf({{c.element}}) != -1{% endfor %} ){
+	
+}

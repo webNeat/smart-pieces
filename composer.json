@@ -1,0 +1,17 @@
+{
+    "name": "webneat/smart-pieces",
+    "description": "Simple framework to build smart pieces of code",
+    "authors": [
+        {
+            "name": "Amine Ben hammou",
+            "email": "webneat@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "~1.5",
+        "symfony/console": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {"wn\\": "src/"}
+    }
+}
