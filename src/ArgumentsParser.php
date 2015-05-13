@@ -52,16 +52,16 @@ class ArgumentsParser {
 		return $this->data;
 	}
 
-	protected function parseElement($element, $format){
+	protected function parseElement($element, $format = null){
 		$result = $element;
-		if(isset($format->type)){
+		if(!is_null($format) && isset($format->type)){
 			switch($format->type){
 				case 'array':
 					$separator = ',';
 					if(isset($format->separator))
 						$separator = $format->separator;
 					$result = [];
-					if($elements != ''){
+					if($element != ''){
 						$elements = explode($separator, $element);
 						foreach ($elements as $e){
 							$result[] = (isset($format->format)) ? 
@@ -96,7 +96,7 @@ class ArgumentsParser {
 						$i ++;
 					}
 				break;
-			}			
+			}		
 		}
 		return $result;
 	}
