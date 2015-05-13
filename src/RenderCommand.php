@@ -41,8 +41,6 @@ class RenderCommand extends  Command {
             $parser = new ArgumentsParser($format);
             $data = $parser->parse($data)->get();
         }
-        print_r($data);
-        echo "\n-----------\n";
         $out->write($this->twig->render("{$name}/{$template}.twig", 
             ['data' => $data])
         );
