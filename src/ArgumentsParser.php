@@ -61,11 +61,13 @@ class ArgumentsParser {
 					if(isset($format->separator))
 						$separator = $format->separator;
 					$result = [];
-					$elements = explode($separator, $element);
-					foreach ($elements as $e){
-						$result[] = (isset($format->format)) ? 
-							$this->parseElement($e, $format->format) : 
-							$this->parseElement($e);
+					if($elements != ''){
+						$elements = explode($separator, $element);
+						foreach ($elements as $e){
+							$result[] = (isset($format->format)) ? 
+								$this->parseElement($e, $format->format) : 
+								$this->parseElement($e);
+						}
 					}
 				break;
 				case 'object':
